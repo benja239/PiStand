@@ -13,3 +13,4 @@ This project largely uses JonA1961's MAX7219array code (found here: https://gith
 * Alarm clock
 * Use Calendar API from Google Calendar to then display the next event in my calendar with a title, location (University
 room) and time, as well as displaying the current time in between.
+* Google assistant API implementation and integration with the display.
