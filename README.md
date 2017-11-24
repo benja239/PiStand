@@ -1,4 +1,5 @@
 # PiStand
+![alt text](https://github.com/benja239/PiStand/blob/master/PiStand%20Time.jpg)
 Raspberry Pi 3 with 2 8x8 dot matrices
 
 This project is using a Raspberry Pi 3, 2 8x8 dot matrices (via 2 MAX7219 LED Display drivers) and python 3.
