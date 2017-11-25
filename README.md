@@ -1,17 +1,49 @@
-# PiStand
-![alt text](https://github.com/benja239/PiStand/blob/master/PiStand%20Time.jpg)
-Raspberry Pi 3 with 2 8x8 dot matrices
+MAX7219array
+============
 
-This project is using a Raspberry Pi 3, 2 8x8 dot matrices (via 2 MAX7219 LED Display drivers) and python 3.
-My aim is to use this display for a number of different functions. Currently getting to grips with using python
-with the MAX7219's to create a digital clock with scrolling text.
+Drive an array of MAX7219 8x8 LED matrices via SPI in Python from the Raspberry Pi
 
-This project largely uses JonA1961's MAX7219array code (found here: https://github.com/JonA1961/MAX7219array) for interfacing with the dot matrix. From his code, I use various methods to write values to the display registers and also the fonts for the 8x8 dot matrix. In his code however, the fonts are stored to be used where the displays are vertical. I wanted them to be horizontal so have recreated the fonts in another orientation.
+Files:
 
----
+MAX7219array.py:
+Library of functions for driving an array of daisy-chained MAX7219 8x8 LED matrix boards
 
-### Future Aims
-* Alarm clock
-* Use Calendar API from Google Calendar to then display the next event in my calendar with a title, location (University
-room) and time, as well as displaying the current time in between.
-* Google assistant API implementation and integration with the display.
+MAX7219fonts.py:
+Fonts data for use by the MAX7219array.py library
+
+MAX7219array_demo.py:
+Demonstration of the features in the MAX7219array library
+
+MAX7219array_ReadMe.py:
+Documentation file consisting largely of comments also included in the other files
+See this file for more details
+
+
+Installation of spidev module required to use this library:
+Before you use these files, unless you already have it installed on your Pi, you need to install spidev.  I suggest you follow the same instructions that I used from http://www.100randomtasks.com/simple-spi-on-raspberry-pi (ignore the references to the TLC549 ADC but follow the instructions as far as the bit that reads "With all the setup now complete, it's time to write some python")
+
+To download all the MAX7219array files, enter the following on your RPi at the command line prompt:
+
+git clone https://github.com/JonA1961/MAX7219array.git
+
+This will create a folder in your current folder called MAX7219array and copy the files from Github into it.
+
+Note that the demo script is written for a set-up of 8 MAX7219 boards.  It should run even if you have a different number but will not (obviously) display exactly what I intended it to.  Looking at the code however you should see how to adapt it for your purposes, or how to use the library functions.
+
+The wiring setup I used for the MAX7219 boards is documented in either the MAX7219array.py or the MAX7219array_ReadMe.py files.  You also need to set the value of NUM_MATRICES in the MAX7219array.py library file to the number of MAX7219 boards you have in your daisy-chain. 
+
+To run the demo, in the MAX7219array folder, enter the following at the command line prompt:
+
+  python MAX7219array_demo.py
+
+To use the library file as a simple command-line utility to scroll a message on the array, first alter the permissions as follows:
+
+  chmod +x MAX7219array.py
+  
+and you can then enter at the command line prompt:
+
+  ./MAX7219array.py 'Your message goes here'
+
+
+Note:
+Written for Python 2.7.  I believe the main culprits requiring attention to make the library script compatible with Python 3 would be the print statements in the last 20 or so lines
