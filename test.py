@@ -44,6 +44,11 @@ def display(char, matrix):
 	for i in range(8):
 		MAX7219array.send_matrix_reg_byte(matrix, i+1, numbers[temp][i])
 		
+def display_char(char, matrix): #location of char code, 1 = left matrix 0 = right
+	temp = int(char)
+
+	for i in range(8):
+		MAX7219array.send_matrix_reg_byte(matrix, i+1, characters[temp][0][i])
 
 def display_scroll_char(char, matrix):
 	temp = int(char)
@@ -80,11 +85,14 @@ def show_time():
 	MAX7219array.clear_all()
 
 
-	#REFERENCING LETTERS
-	#test = [(a,0), (b,0)]
-	#for i in range(len(test)):
-	#if test[i][0] == 'a':
-	#	print(test[i])
+
+def show_letter(letter):
+	for i in range(len(characters)):
+		if characters[i][1] == letter:
+			print(str(letter) + ' is ' + str(characters[i][0]))
+			for j in range(8):
+				MAX7219array.send_matrix_reg_byte(1, j+1, characters[i][0][j])
+
 
 ##############################################################################
 #MAIN
@@ -118,32 +126,32 @@ numbers = [
 colon = [0, 12, 12, 0, 0, 12, 12, 0]
 
 characters = [
-[94, 51, 62, 48, 30, 0, 0, 0],						#a
-[59, 102, 102, 62, 6, 6, 7, 0],						#b
-[30, 51, 3, 51, 30, 0, 0, 0],						#c
-[110, 51, 51, 62, 48, 48, 56, 0],					#d
-[30, 3, 63, 51, 30, 0 , 0],							#e
-[15, 6, 6, 15, 6, 54, 28, 0],						#f
-[31, 48, 62, 51, 51, 110, 0, 0],					#g
-[103, 102, 102, 110, 54, 6, 7, 0],					#h
-[15, 6, 6, 6, 7, 0, 6, 0],							#i
-[30, 51, 51, 48, 48, 48, 0, 48],					#j
-[103, 54, 30, 54, 102, 7, 0],						#k
-[15, 6, 6, 6, 6, 6, 7, 0],							#l
-[99, 107, 127, 127, 51, 0, 0, 0],					#m
-[51, 51, 51, 51, 31, 0, 0, 0],						#n
-[30, 51, 51, 51, 30, 0, 0, 0],						#o
-[15, 6, 62, 102, 102, 59, 0, 0],					#p
-[102, 48, 62, 51, 110, 0, 0 ],						#q
-[15, 6, 102, 110, 59, 0, 0, 0],						#r
-[31, 48, 30, 3, 62, 0, 0, 0],						#s
-[12, 22, 6, 6, 31, 6, 8, 0],						#t
-[110, 51, 51, 51, 51, 0, 0, 0],						#u
-[12, 30, 51, 51, 51, 0, 0, 0],						#v
-[54, 127, 127, 107, 99, 0, 0, 0],					#w
-[99,  54, 28, 54, 99, 0, 0, 0],						#x
-[31, 48, 62, 51, 51, 51, 0, 0],						#y
-[63, 38, 12, 25, 63, 0, 0, 0]						#z
+([94, 51, 62, 48, 30, 0, 0, 0],'a'),						#a
+([59, 102, 102, 62, 6, 6, 7, 0],'b'),						#b
+([30, 51, 3, 51, 30, 0, 0, 0],'c'),							#c
+([110, 51, 51, 62, 48, 48, 56, 0],'d'),						#d
+([30, 3, 63, 51, 30, 0 , 0, 0],'e'),						#e
+([15, 6, 6, 15, 6, 54, 28, 0],'f'),							#f
+([31, 48, 62, 51, 51, 110, 0, 0],'g'),						#g
+([103, 102, 102, 110, 54, 6, 7, 0],'h'),					#h
+([15, 6, 6, 6, 7, 0, 6, 0],'i'),							#i
+([30, 51, 51, 48, 48, 48, 0, 48],'j'),						#j
+([103, 54, 30, 54, 102, 7, 0, 0],'k'),						#k
+([15, 6, 6, 6, 6, 6, 7, 0],'l'),							#l
+([99, 107, 127, 127, 51, 0, 0, 0],'m'),						#m
+([51, 51, 51, 51, 31, 0, 0, 0],'n'),						#n
+([30, 51, 51, 51, 30, 0, 0, 0],'o'),						#o
+([15, 6, 62, 102, 102, 59, 0, 0],'p'),						#p
+([102, 48, 62, 51, 110, 0, 0, 0],'q'),						#q
+([15, 6, 102, 110, 59, 0, 0, 0],'r'),						#r
+([31, 48, 30, 3, 62, 0, 0, 0],'s'),							#s
+([12, 22, 6, 6, 31, 6, 8, 0],'t'),							#t
+([110, 51, 51, 51, 51, 0, 0, 0],'u'),						#u
+([12, 30, 51, 51, 51, 0, 0, 0],'v'),						#v
+([54, 127, 127, 107, 99, 0, 0, 0],'w'),						#w
+([99,  54, 28, 54, 99, 0, 0, 0],'x'),						#x
+([31, 48, 62, 51, 51, 51, 0, 0],'y'),						#y
+([63, 38, 12, 25, 63, 0, 0, 0],'z')							#z
 ]
 
 
@@ -152,23 +160,21 @@ characters = [
 
 try:
 	running_dot()
-	running_dot()
+	#running_dot()
 
 	# MAX7219array.send_matrix_reg_byte(0, 1, int('10101010', 2))
 	time.sleep(1)
 	MAX7219array.clear_all();
-	# display_scroll_char(numbers[1], 1)
-	# display_scroll_char(numbers[7], 1)
-	# display_scroll_char(colon, 1)
-	# display_scroll_char(numbers[3], 1)
-	# display_scroll_char(numbers[2], 1)
-	########################
-	#for i in range(8):
-	#	MAX7219array.send_matrix_reg_byte(1, i, characters[0][i])
-	#time.sleep(10)
-	while True:
-		show_time()
-		time.sleep(5)
+	
+
+	#display_char(1,1)
+	show_letter('a')
+	time.sleep(5)
+
+	#-- Clock on repeat --
+	#while True:
+	#	show_time()
+	#	time.sleep(5)
 	MAX7219array.clear_all()
 
 except KeyboardInterrupt:
