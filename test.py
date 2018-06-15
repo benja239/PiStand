@@ -38,18 +38,14 @@ def running_dot():
 		time.sleep(0.04)
 		MAX7219array.send_matrix_reg_byte(0, 6-i, 128)
 
+
 def display(char, matrix):
 	temp = int(char)
 
 	for i in range(8):
 		MAX7219array.send_matrix_reg_byte(matrix, i+1, numbers[temp][i])
+
 		
-def display_char(char, matrix): #location of char code, 1 = left matrix 0 = right
-	temp = int(char)
-
-	for i in range(8):
-		MAX7219array.send_matrix_reg_byte(matrix, i+1, characters[temp][0][i])
-
 def display_scroll_char(char, matrix):
 	temp = int(char)
 
@@ -58,6 +54,7 @@ def display_scroll_char(char, matrix):
 			MAX7219array.send_matrix_reg_byte(matrix, i+1, numbers[temp][i]*2**n)
 		time.sleep(0.1)
 		MAX7219array.clear_all()
+
 
 def show_time():
 	print(time.strftime('%H:%M'))
@@ -92,6 +89,45 @@ def show_letter(letter):
 			print(str(letter) + ' is ' + str(characters[i][0]))
 			for j in range(8):
 				MAX7219array.send_matrix_reg_byte(1, j+1, characters[i][0][j])
+
+
+def scroll_letter(letter, matrix):
+	for i in range(len(characters)):
+		if characters[i][1] == letter:
+			print(str(letter) + ' is ' + str(characters[i][0]))
+			for n in range(8):
+				for j in range(8):
+					MAX7219array.send_matrix_reg_byte(matrix, j+1, characters[i][0][j]*2**n)
+				time.sleep(0.1)
+				MAX7219array.clear_all()
+
+
+def scroll_letter_left(letter, matrix):
+	for i in range(len(characters)):
+		if characters[i][1] == letter:
+			print(str(letter) + ' is ' + str(characters[i][0]))
+			for n in range(8):
+				for j in range(8):
+					MAX7219array.send_matrix_reg_byte(matrix, j+1, characters[i][0][j]/2**n)
+				time.sleep(0.1)
+				MAX7219array.clear_all()
+
+
+#n - step of movement
+#j - row
+def scroll_letter_across(letter):
+	for i in range(len(characters)):
+		if characters[i][1] == letter:
+			print(str(letter) + ' is ' + str(characters[i][0]))
+			for n in range(16):
+				for j in range(8):
+					MAX7219array.send_matrix_reg_byte(1, j+1, characters[i][0][j]*2**n)
+					if characters[i][0][j]*2**n - 255 > 0:
+						nextDisplay = characters[i][0][j]*2**n - 255
+						MAX7219array.send_matrix_reg_byte(0, j+1, nextDisplay)
+
+				time.sleep(1)
+				MAX7219array.clear_all()
 
 
 ##############################################################################
@@ -155,7 +191,7 @@ characters = [
 ]
 
 
-
+#255 is maximum per row
 
 
 try:
@@ -166,9 +202,13 @@ try:
 	time.sleep(1)
 	MAX7219array.clear_all();
 	
-
-	#display_char(1,1)
-	show_letter('a')
+	#scroll_letter('a')
+	
+	time.sleep(2)
+	scroll_letter('h',1)
+	scroll_letter_left('h',1)
+	scroll_letter_across('a')
+	
 	time.sleep(5)
 
 	#-- Clock on repeat --
