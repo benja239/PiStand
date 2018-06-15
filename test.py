@@ -115,19 +115,54 @@ def scroll_letter_left(letter, matrix):
 
 #n - step of movement
 #j - row
-def scroll_letter_across(letter):
+def scroll_letter_LR(letter):
 	for i in range(len(characters)):
 		if characters[i][1] == letter:
 			print(str(letter) + ' is ' + str(characters[i][0]))
 			for n in range(16):
 				for j in range(8):
 					MAX7219array.send_matrix_reg_byte(1, j+1, characters[i][0][j]*2**n)
-					if characters[i][0][j]*2**n - 255 > 0:
-						nextDisplay = characters[i][0][j]*2**n - 255
+					if characters[i][0][j]*2**n >128:
+						nextDisplay = characters[i][0][j]*2**n/256
 						MAX7219array.send_matrix_reg_byte(0, j+1, nextDisplay)
 
-				time.sleep(1)
+				time.sleep(0.1)
 				MAX7219array.clear_all()
+
+def scroll_letter_RL(letter):
+	for i in range(len(characters)):
+		if characters[i][1] == letter:
+			print(str(letter) + ' is ' + str(characters[i][0]))
+			for n in range(16):
+				for j in range(8):
+					thing = characters[i][0][j]
+					thingf = float(thing)
+					valf = float(thingf/2**n)
+					lower = valf - int(valf)
+					MAX7219array.send_matrix_reg_byte(0, j+1, int(valf))
+					MAX7219array.send_matrix_reg_byte(1, j+1, int(lower*256))
+
+				time.sleep(0.1)
+				MAX7219array.clear_all()
+
+def scrollLR(thing):
+	for i in range(16):
+		val = thing*2**i
+		print(val)
+		MAX7219array.send_matrix_reg_byte(1, 1, val)
+		if val > 128:
+			MAX7219array.send_matrix_reg_byte(0, 1, val/256)
+		time.sleep(0.2)
+
+def scrollRL(thing):
+	for i in range(16):
+		thingf = float(thing)
+		valf = float(thingf/2**i)
+		lower = valf - int(valf)
+		MAX7219array.send_matrix_reg_byte(0, 1, int(valf))
+		MAX7219array.send_matrix_reg_byte(1,1, int(lower*256))
+		time.sleep(0.5)
+			
 
 
 ##############################################################################
@@ -202,14 +237,9 @@ try:
 	time.sleep(1)
 	MAX7219array.clear_all();
 	
-	#scroll_letter('a')
-	
-	time.sleep(2)
-	scroll_letter('h',1)
-	scroll_letter_left('h',1)
-	scroll_letter_across('a')
-	
-	time.sleep(5)
+	test = 'hello'
+	for i in range(len(test)):
+		scroll_letter_RL(test[i])
 
 	#-- Clock on repeat --
 	#while True:
